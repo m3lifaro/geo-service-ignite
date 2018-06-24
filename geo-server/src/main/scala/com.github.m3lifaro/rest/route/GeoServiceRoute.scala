@@ -14,13 +14,15 @@ class GeoServiceRoute(DB: IgniteDB)(implicit executionContext: ExecutionContext,
   val route: Route = locate ~ nearCell ~ createMark ~ updateMark ~ deleteMark()
 
   def locate: Route = pathPrefix("api/mark/locate") {
-    entity(as[UserMark]) { location =>
-      onComplete(DB.nearMark(location)) {
-        case Success(resp) ⇒
-          complete(resp)
-        case Failure(err) ⇒
-          logger.error("Some error occurred", err)
-          complete(StatusCodes.BadRequest -> err.getMessage)
+    post {
+      entity(as[UserMark]) { location =>
+        onComplete(DB.nearMark(location)) {
+          case Success(resp) ⇒
+            complete(resp)
+          case Failure(err) ⇒
+            logger.error("Some error occurred", err)
+            complete(StatusCodes.BadRequest -> err.getMessage)
+        }
       }
     }
   }

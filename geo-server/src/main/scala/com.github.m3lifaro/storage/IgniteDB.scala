@@ -92,7 +92,7 @@ class IgniteDB(locationFileName: String, geoFileName: String)(implicit m: Materi
       cellDao.create(cell)
     })
 
-    val markFuture = getLocationStream(marksPath).grouped(1000).runWith(Sink.foreach{ marks ⇒
+    val markFuture = getLocationStream(marksPath).grouped(100000).runWith(Sink.foreach{ marks ⇒
       marksDao.createAll(marks)
     })
 

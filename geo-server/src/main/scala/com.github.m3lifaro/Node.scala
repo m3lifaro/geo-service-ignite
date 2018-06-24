@@ -16,11 +16,10 @@ import scala.concurrent.{Await, ExecutionContextExecutor}
 
 object Node extends App with StrictLogging {
 
-  //  GeoServiceSupport.generate()
-
   val params = args.toList match {
     case "--mark" :: markPath :: "--cell" :: cellPath :: tail => Some(markPath, cellPath)
-    case _ ⇒ logger.info("Usage: mmlaln [--mark markfilepath] [--cell cellfilepath] "); None
+    case "--generate" :: markfilename :: cellfilename :: tail ⇒ logger.info("generating files"); GeoServiceSupport.generate(markfilename, cellfilename); None
+    case _ ⇒ logger.info("Usage: [--mark markfilepath] [--cell cellfilepath] | [--generate markfilename cellfilename"); None
   }
   params match {
     case Some((locationFileName, geoFileName)) ⇒
