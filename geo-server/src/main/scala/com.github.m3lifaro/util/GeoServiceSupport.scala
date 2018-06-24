@@ -76,6 +76,7 @@ object GeoServiceSupport extends StrictLogging {
     }
     pw.write(s"100\t100\t1000\n")
     pw.write(s"20\t45\t9999999999999999\n")
+    pw.write(s"23\t38\t10000\n")
     pw.close()
 
     val stream = (0 until 100).toStream.map(elem => (elem, 40 * rnd.nextDouble(), 90 * rnd.nextDouble()))

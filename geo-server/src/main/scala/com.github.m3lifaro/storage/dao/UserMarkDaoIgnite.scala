@@ -43,9 +43,9 @@ class UserMarkDaoIgnite {
     }
   }
 
-  def deleteUser(user: UserMark): Future[Unit] = {
+  def deleteUser(id: Long): Future[Unit] = {
     Future{
-      userMarkCache.remove(user.id)
+      userMarkCache.remove(id)
     }
   }
 

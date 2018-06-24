@@ -26,7 +26,7 @@ class DBSpec extends AsyncFlatSpec with Matchers with BeforeAndAfterAll {
 
   "ignite remove mark" should "remove mark" in {
     val mark = UserMark(10, 10, 100)
-    val f = db.deleteMark(mark)
+    val f = db.deleteMark(mark.id)
     f flatMap { sum => db.findMark(100) } map { elem ⇒ assert(elem.isEmpty) }
   }
 

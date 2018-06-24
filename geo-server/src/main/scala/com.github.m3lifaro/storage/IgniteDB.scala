@@ -60,8 +60,8 @@ class IgniteDB(locationFileName: String, geoFileName: String)(implicit m: Materi
     marksDao.updateUser(mark)
   }
 
-  def deleteMark(mark: UserMark): Future[Unit] = {
-    marksDao.deleteUser(mark)
+  def deleteMark(id: Long): Future[Unit] = {
+    marksDao.deleteUser(id)
   }
 
   def findMark(id: Long): Future[Option[UserMark]] = {
