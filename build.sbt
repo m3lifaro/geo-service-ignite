@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
 lazy val server = (project in file("geo-server")).settings(
   commonSettings,
   name := "geo-service",
-  assemblyJarName in assembly := s"geo-service.jar",
+  assemblyJarName in assembly := "geo-service.jar",
   scalacOptions in Test ++= Seq("-Yrangepos"),
   libraryDependencies ++= Seq(
     akkaHttp,
