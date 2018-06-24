@@ -36,6 +36,7 @@
     math.sqrt(math.pow(dCos * sin_delta, 2) + math.pow(uCos * dSin - uSin * dCos * cos_delta, 2))
     uSin * dSin + uCos * dCos * cos_delta
     val ad = Math.atan2(y, x)
+    ad * earth_r
 в приближении, что радиус земли равен 6372795 метрам
 
 Гео сетка заполняется целыми числами , соотносящимися в градусами широты и долготы, а так же натуральным значением ошибки определения точки:
