@@ -23,7 +23,7 @@ class GeoServiceRoute(DB: IgniteDB)(implicit executionContext: ExecutionContext,
             case Success(resp) ⇒
               complete(resp)
             case Failure(err) ⇒
-              logger.error("Some error occurred", err)
+              logger.error("Some error occurred: " + err.getMessage)
               complete(StatusCodes.BadRequest -> err.getMessage)
           }
         }
@@ -39,7 +39,7 @@ class GeoServiceRoute(DB: IgniteDB)(implicit executionContext: ExecutionContext,
             case Success(users) ⇒
               complete(users)
             case Failure(err) ⇒
-              logger.error("Some error occurred", err)
+              logger.error("Some error occurred: " + err.getMessage)
               complete(StatusCodes.BadRequest -> err.getMessage)
           }
         }
@@ -55,7 +55,7 @@ class GeoServiceRoute(DB: IgniteDB)(implicit executionContext: ExecutionContext,
             case Success(resp) ⇒
               complete(resp)
             case Failure(err) ⇒
-              logger.error("Some error occurred", err)
+              logger.error("Some error occurred: " + err.getMessage)
               complete(StatusCodes.BadRequest -> err.getMessage)
           }
         }
@@ -71,24 +71,23 @@ class GeoServiceRoute(DB: IgniteDB)(implicit executionContext: ExecutionContext,
             case Success(resp) ⇒
               complete(resp)
             case Failure(err) ⇒
-              logger.error("Some error occurred", err)
+              logger.error("Some error occurred: " + err.getMessage)
               complete(StatusCodes.BadRequest -> err.getMessage)
           }
         }
       }
     }
-  } ~ path("marker" / "delete") {
+  } ~ path("api" / "mark" / "delete_mark") {
     parameters('id.as[Int]) { id =>
-
       delete {
-          println("id = " + id)
         onComplete(DB.deleteMark(id)) {
           case Success(_) ⇒
             complete(StatusCodes.OK)
           case Failure(err) ⇒
-            logger.error("Some error occurred", err)
+            logger.error("Some error occurred: " + err.getMessage)
             complete(StatusCodes.BadRequest -> err.getMessage)
-        }      }
+        }
+      }
     }
   }
 

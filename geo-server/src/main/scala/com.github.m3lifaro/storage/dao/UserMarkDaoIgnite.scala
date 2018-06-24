@@ -1,6 +1,6 @@
 package com.github.m3lifaro.storage.dao
 import com.github.m3lifaro.common.{Border, UserMark, UserMarkFrom, UserMarkJ}
-import com.github.m3lifaro.storage.IgniteDB
+import com.github.m3lifaro.storage.{IgniteDB, UserMarkNotFoundException}
 
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,7 +28,7 @@ class UserMarkDaoIgnite {
   def createUser(user: UserMark): Future[UserMark] = {
     Future {
       val id = userMarkIds.getAndIncrement()
-      Try(userMarkCache.put(id, user.toJava)) match {
+      Try(userMarkCache.put(id, user.copy(id = id).toJava)) match {
         case Success(_) ⇒ user.copy(id = id)
         case Failure(e) ⇒ println(e); throw e
       }
@@ -45,7 +45,11 @@ class UserMarkDaoIgnite {
 
   def deleteUser(id: Long): Future[Unit] = {
     Future{
-      userMarkCache.remove(id)
+      if (userMarkCache.containsKey(id)) {
+        userMarkCache.remove(id)
+      } else {
+        throw UserMarkNotFoundException(s"user with id = $id not found")
+      }
     }
   }
 
