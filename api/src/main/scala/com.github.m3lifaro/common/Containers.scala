@@ -20,3 +20,7 @@ case class GeoCell(tile_x: Int, tile_y: Int, distance_error: Double) {
 case class Border(lLat: Double, hLat: Double, lLon: Double, hLon: Double)
 
 case class NearMark(isNear: Boolean, message: String)
+
+case class Cell(tile_x: Int, tile_y: Int) {
+  require(tile_x <= 180 && tile_x >= -180 && tile_y <= 90 && tile_y >= -90)
+}

@@ -2,12 +2,14 @@ package com.github.m3lifaro.storage
 
 import java.nio.file.Paths
 
-import akka.stream.scaladsl.{FileIO, Framing, Sink, Source}
+import akka.NotUsed
+import akka.stream.scaladsl.{FileIO, Flow, Framing, Sink, Source}
 import akka.stream.{IOResult, Materializer}
 import akka.util.ByteString
 import com.github.m3lifaro.common._
 import com.github.m3lifaro.storage.dao.{GeoCellDaoIgnite, UserMarkDaoIgnite}
 import com.typesafe.scalalogging.StrictLogging
+import org.apache.ignite.configuration.CacheConfiguration
 import org.apache.ignite.{IgniteAtomicSequence, IgniteCache}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -67,7 +69,9 @@ class IgniteDB(locationFileName: String, geoFileName: String)(implicit m: Materi
   }
 
   private def getStream[T](file: String)(transformer : String ⇒ T) = FileIO.fromPath(Paths.get(file))
-    .via(Framing.delimiter(ByteString("\n"), 256, allowTruncation = true).map(_.utf8String))
+    .via(Framing.delimiter(ByteString("\n"), 512, allowTruncation = true)
+        .filter(_.nonEmpty)
+      .map(_.utf8String))
     .map(transformer)
 
   private def getLocationStream(file: String): Source[UserMark, Future[IOResult]] = getStream(file){ elem ⇒
@@ -112,10 +116,24 @@ object IgniteDB {
     Ignition.ignite.atomicSequence("userMarkSequence", 0, true)
 
   def userMarkIgniteCache: IgniteCache[Long, UserMarkJ] =
-    Ignition.ignite.getOrCreateCache(CacheConfigurations.userMarkCacheConfiguration)
+    Ignition.ignite.getOrCreateCache(userMarkCacheConfiguration)
 
   def geoCellIgniteCache: IgniteCache[(Int,Int), GeoCell] =
-    Ignition.ignite.getOrCreateCache(CacheConfigurations.geoCellCacheConfiguration)
+    Ignition.ignite.getOrCreateCache(geoCellCacheConfiguration)
+
+  private val geoCellCacheConfiguration: CacheConfiguration[(Int,Int), GeoCell] = {
+    val cc = new CacheConfiguration[(Int, Int), GeoCell]
+    cc.setName("geoCell")
+    cc.setIndexedTypes(classOf[(Int, Int)], classOf[GeoCell])
+    cc
+  }
+
+  private val userMarkCacheConfiguration: CacheConfiguration[Long, UserMarkJ] = {
+    val cc = new CacheConfiguration[Long, UserMarkJ]
+    cc.setName("userMark")
+    cc.setIndexedTypes(classOf[Long], classOf[UserMarkJ])
+    cc
+  }
 }
 
 case class GeoCellNotFoundException(msg: String) extends Exception(msg)

@@ -1,11 +1,10 @@
 package com.github.m3lifaro.storage.dao
 import com.github.m3lifaro.common.{Border, UserMark, UserMarkFrom, UserMarkJ}
 import com.github.m3lifaro.storage.IgniteDB
-import org.apache.ignite.cache.query.{SqlFieldsQuery, SqlQuery}
 
-import scala.concurrent.Future
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 class UserMarkDaoIgnite {
@@ -23,8 +22,6 @@ class UserMarkDaoIgnite {
     val qry: SqlQuery[Long, UserMarkJ] = new SqlQuery(classOf[UserMarkJ], s"lat >= ${border.lLat} and lat <= ${border.hLat} and lon >= ${border.lLon} and lon <= ${border.hLon}")
 
     userMarkCache.query(qry).getAll.asScala.toList.map(_.getValue).map(UserMarkFrom.fromJava)
-//    userMarkCache.query(qry.setArgs(0, 40, 0 , 20)).getAll.asScala.toList.map(_.getValue)
-//    userMarkCache.query(qry.setArgs(border.lLat, border.hLat, border.lLon, border.hLon)).getAll.asScala.toList.map(_.getValue)
   }
 
 
