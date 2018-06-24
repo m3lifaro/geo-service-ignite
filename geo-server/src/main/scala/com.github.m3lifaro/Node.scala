@@ -19,7 +19,7 @@ object Node extends App with StrictLogging {
   val params = args.toList match {
     case "--mark" :: markPath :: "--cell" :: cellPath :: tail => Some(markPath, cellPath)
     case "--generate" :: markfilename :: cellfilename :: tail ⇒ logger.info("generating files"); GeoServiceSupport.generate(markfilename, cellfilename); None
-    case _ ⇒ logger.info("Usage: [--mark markfilepath] [--cell cellfilepath] | [--generate markfilename cellfilename"); None
+    case _ ⇒ logger.info("Usage: [--mark markfilepath --cell cellfilepath] | [--generate markfilename cellfilename]"); None
   }
   params match {
     case Some((locationFileName, geoFileName)) ⇒

@@ -1,3 +1,12 @@
+Запуск :            
+
+     sbt -mem 4096 "server/run --mark mark_filename --cell geo_filename"
+     
+
+Генерация файлов:
+
+     sbt -mem 4096 "server/run --generate mark_filename geo_filename" 
+
 # geo-service
 Сервис, обрабатывающий запросы о географических метках пользователей
 
