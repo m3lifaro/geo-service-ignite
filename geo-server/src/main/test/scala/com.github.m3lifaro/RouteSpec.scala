@@ -20,7 +20,7 @@ class RouteSpec extends WordSpecLike with Matchers with BeforeAndAfterAll with S
   val routes: Route = new GeoServiceRoute(db).route
 
   "GeoRoute" should {
-    "Posting to api/mark/create_mark should add the event" in {
+    "Posting to api/mark/create_mark should add the mark" in {
       val jsonRequest = ByteString(
         s"""
            |{
