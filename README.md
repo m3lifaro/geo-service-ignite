@@ -1,11 +1,18 @@
 Запуск :            
 
      sbt -mem 4096 "server/run --mark mark_filename --cell geo_filename"
-     
+     или
+     java -jar jar_path --mark mark_filename --cell geo_filename
 
 Генерация файлов:
 
-     sbt -mem 4096 "server/run --generate mark_filename geo_filename" 
+     sbt -mem 4096 "server/run --generate mark_filename geo_filename"
+     или
+     java -jar jar_path --generate mark_filename geo_filename
+
+Сборка (генерирует geo-service/geo-server/target/scala-2.12/geo-service.jar): 
+
+     sbt server/assembly
 
 # geo-service
 Сервис, обрабатывающий запросы о географических метках пользователей
@@ -53,7 +60,7 @@
 - удаление пользователя - O(1)
 - обновление пользователя - O(1)
 - определение близости к точке - O(1)
-- поиск всех пользователей в окрестности точки - O (1) + O (?)
+- поиск всех пользователей в окрестности точки - O (log(n))
 
 Текущая реализация гео-сетки упрощена, взяты только целые части (градусы, без минут и секунд), так же сделано предположение о сферичности земли, в следствие чего сделано допущение, что расстояние в метрах за один градус широты/долготы всегда константно и равно 0.000009009
 
